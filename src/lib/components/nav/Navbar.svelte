@@ -6,6 +6,10 @@
 		{
 			href: '/',
 			text: 'Home'
+		},
+		{
+			href: '/stream',
+			text: 'Stream'
 		}
 	];
 </script>
