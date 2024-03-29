@@ -9,7 +9,7 @@
 #   - https://hub.docker.com/r/hexpm/elixir/tags - for the build image
 #   - https://hub.docker.com/_/debian?tab=tags&page=1&name=bullseye-20240130-slim - for the release image
 #   - https://pkgs.org/ - resource for finding needed packages
-#   - Ex: hexpm/elixir:1.16.2-erlang-26.2.3-debian-bullseye-20240130-slim
+#   - Ex: hexpm/elixir:1.16.1-erlang-26.2.1-debian-bullseye-20240130-slim
 #
 ARG ELIXIR_VERSION=1.16.2
 ARG OTP_VERSION=26.2.3
@@ -22,14 +22,14 @@ FROM ${BUILDER_IMAGE} as builder
 
 # install build dependencies
 RUN apt-get update -y && apt-get install -y build-essential git \
-  && apt-get clean && rm -f /var/lib/apt/lists/*_*
+    && apt-get clean && rm -f /var/lib/apt/lists/*_*
 
 # prepare build dir
 WORKDIR /app
 
 # install hex + rebar
 RUN mix local.hex --force && \
-  mix local.rebar --force
+    mix local.rebar --force
 
 # set build ENV
 ARG MIX_ENV="dev"
@@ -85,7 +85,7 @@ ENV MIX_ENV=$MIX_ENV PHX_HOST=$PHX_HOST PORT=$PORT
 EXPOSE $PORT
 
 # Only copy the final release from the build stage
-COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/streaming_service ./
+COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/auth_service ./
 
 USER nobody
 
