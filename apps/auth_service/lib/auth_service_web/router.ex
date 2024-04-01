@@ -1,4 +1,5 @@
 defmodule AuthServiceWeb.Router do
+  alias AuthServiceWeb.UserController
   use AuthServiceWeb, :router
 
   pipeline :api do
@@ -7,6 +8,7 @@ defmodule AuthServiceWeb.Router do
 
   scope "/api", AuthServiceWeb do
     pipe_through :api
+    resources "/users", UserController
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
