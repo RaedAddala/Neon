@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { mediaStream } from '$lib/stores/stream';
+	import { mediaStream } from '$lib/stores';
 
 	let videoElem: HTMLVideoElement | null = null;
 
