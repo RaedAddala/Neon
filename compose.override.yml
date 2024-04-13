@@ -1,0 +1,8 @@
+services:
+  streaming-service:
+    ports:
+      - 4002:4000
+
+  live-chat-service:
+    ports:
+      - 4004:4000
