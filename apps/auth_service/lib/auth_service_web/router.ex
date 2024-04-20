@@ -2,19 +2,6 @@ defmodule AuthServiceWeb.Router do
   alias AuthServiceWeb.UserController
   use AuthServiceWeb, :router
 
-  pipeline :static do
-    plug Plug.Static,
-      at: "/uploads",
-      from: {:auth_service, "priv/static/uploads/profile_pictures"}
-  end
-
-  scope "/", AuthServiceWeb do
-    scope "/uploads" do
-      pipe_through :static
-      get "/*path", ErrorController, :notfound
-    end
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
   end

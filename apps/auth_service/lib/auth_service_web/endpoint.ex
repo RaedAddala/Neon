@@ -25,6 +25,10 @@ defmodule AuthServiceWeb.Endpoint do
     gzip: false,
     only: AuthServiceWeb.static_paths()
 
+  plug Plug.Static,
+    at: "/uploads",
+    from: {:auth_service, "priv/static/uploads/profile_pictures"}
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
