@@ -15,9 +15,10 @@ defmodule AuthService.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :email, :password])
+    |> cast(attrs, [:username, :email, :password, :profile_picture])
     |> validate_required([:username, :email, :password])
     |> unique_constraint(:email)
+    |>unique_constraint(:username)
     |> validate_format(:email, ~r/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
     |> validate_format(:password, ~r/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
     |> put_password_hash()
