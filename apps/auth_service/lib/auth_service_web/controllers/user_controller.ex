@@ -18,7 +18,7 @@ defmodule AuthServiceWeb.UserController do
   #   end
   # end
 
-  def register(conn, %{"user" => user_params}) do
+  def register(conn, user_params) do
     with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
       conn
       |> put_status(:created)
