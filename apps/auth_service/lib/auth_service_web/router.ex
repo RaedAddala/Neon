@@ -6,9 +6,15 @@ defmodule AuthServiceWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", AuthServiceWeb do
+  scope "/api" do
     pipe_through :api
-    resources "/users", UserController
+
+    scope "/users" do
+      resources "/users", UserController
+      post "/login", UserController, :login
+      post "/logout", UserController, :logout
+      post "/register", UserController, :register
+    end
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

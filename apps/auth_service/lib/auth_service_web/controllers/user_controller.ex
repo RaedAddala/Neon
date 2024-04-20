@@ -3,8 +3,62 @@ defmodule AuthServiceWeb.UserController do
 
   alias AuthService.Accounts
   alias AuthService.Accounts.User
+  alias AuthService.Guardian
 
   action_fallback AuthServiceWeb.FallbackController
+
+  # def new(conn, _) do
+  #   changeset = Accounts.change_user(%User{})
+  #   maybe_user = Guardian.Plug.current_resource(conn)
+
+  #   if maybe_user do
+  #     redirect(conn, to: "/protected")
+  #   else
+  #     render(conn, "new.html", changeset: changeset, action: Routes.session_path(conn, :login))
+  #   end
+  # end
+
+  def register(conn, %{"user" => user_params}) do
+    with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
+      conn
+      |> put_status(:created)
+      |> auth_reply(user)
+    end
+  end
+
+  def login(conn, %{"user" => %{"email" => email, "password" => password}}) do
+    Accounts.authenticate_user(email, password)
+    |> auth_reply(conn)
+  end
+
+  def logout(conn, _) do
+    conn
+    # This module's full name is Auth.Accounts.Guardian.Plug,
+    |> Guardian.Plug.sign_out()
+    |> IO.inspect()
+
+    # and the arguments specified in the Guardian.Plug.sign_out()
+    |> json(:ok)
+  end
+
+  defp auth_reply({:ok, user}, conn) do
+    conn
+    |> Guardian.Plug.sign_in(user)
+    |> parse_auth_response()
+  end
+
+  defp auth_reply({:error, reason}, conn) do
+    conn
+    |> json(%{"error" => reason})
+  end
+
+  defp auth_reply(conn, user) do
+    auth_reply({:ok, user}, conn)
+  end
+
+  defp parse_auth_response(conn) do
+    json(conn, %{"token" => conn.private.guardian_default_token})
+  end
 
   def index(conn, _params) do
     users = Accounts.list_users()

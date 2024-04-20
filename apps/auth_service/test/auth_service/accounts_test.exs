@@ -1,6 +1,7 @@
+# TODO: Change user tests to handle email and password validation and password hashing
+
 defmodule AuthService.AccountsTest do
   use AuthService.DataCase
-
   alias AuthService.Accounts
 
   describe "users" do
@@ -21,12 +22,12 @@ defmodule AuthService.AccountsTest do
     end
 
     test "create_user/1 with valid data creates a user" do
-      valid_attrs = %{username: "some username", password: "some password", email: "some email"}
+      valid_attrs = %{username: "some username", password: "Some password.", email: "someemail@email.com"}
 
       assert {:ok, %User{} = user} = Accounts.create_user(valid_attrs)
       assert user.username == "some username"
-      assert user.password == "some password"
-      assert user.email == "some email"
+      assert {:ok, user} == Argon2.check_pass(user, "Some password.", hash_key: :password)
+      assert user.email == "someemail@email.com"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
