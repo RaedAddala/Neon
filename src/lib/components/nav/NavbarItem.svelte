@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { NavbarItemContent } from '$lib/types/nav';
+	import type { NavbarItemContent } from '$lib/types';
 
 	export let content: NavbarItemContent;
 </script>

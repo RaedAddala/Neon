@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { NavbarItemContent } from '$lib/types/nav';
+	import type { NavbarItemContent } from '$lib/types';
 	import NavbarItem from './NavbarItem.svelte';
 
 	const NavbarItems: NavbarItemContent[] = [
