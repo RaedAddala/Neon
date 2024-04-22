@@ -4,6 +4,7 @@ defmodule AuthService.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias AuthService.FileUploader
   alias Hex.API.User
   alias AuthService.Repo
 
@@ -70,24 +71,14 @@ defmodule AuthService.Accounts do
   """
   def create_user(attrs \\ %{}) do
     attrs =
-      if upload = attrs["profile_picture"] do
-        extension = Path.extname(upload.filename)
-
-        filename =
-          Integer.to_string(:rand.uniform(4_294_967_296), 32) <>
-            Integer.to_string(:rand.uniform(4_294_967_296), 32)
-
-        File.cp(
-          upload.path,
-          "./priv/static/uploads/profile_pictures/#{filename}-cover#{extension}"
-        )
-
-        %{attrs | "profile_picture" => "/uploads/#{filename}-cover#{extension}"}
+      if(
+        (upload = attrs["profile_picture"]) && ImageChecker.is_image?(attrs["profile_picture"])
+      ) do
+        file = FileUploader.upload_file(upload, "./priv/static/uploads/profile_pictures/")
+        %{attrs | "profile_picture" => "/uploads/#{file}"}
       else
         %{attrs | "profile_picture" => "/uploads/default.jpg"}
       end
-
-    IO.inspect(attrs)
 
     %User{}
     |> User.changeset(attrs)
