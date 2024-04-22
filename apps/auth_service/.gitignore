@@ -25,3 +25,5 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 auth_service-*.tar
 
+# file uploads 
+/priv/static/uploads
