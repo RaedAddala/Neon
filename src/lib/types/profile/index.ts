@@ -8,4 +8,4 @@ export interface User {
 	following: User[];
 }
 
-export type MessageUser = Pick<User, 'username' | 'profilePicture'>;
+export type MessageUser = Pick<User, 'username'> & Partial<Pick<User, 'profilePicture'>>;

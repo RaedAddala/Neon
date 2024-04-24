@@ -24,13 +24,12 @@
 		}
 
 		const message: MessageType = {
-			user: {
-				username: $user!.username,
-				profilePicture: $user!.profilePicture
-			},
-			date: new Date(),
+			id: crypto.randomUUID(),
 			message: messageContents,
-			messageId: crypto.randomUUID()
+			user: {
+				username: $user!.username
+			},
+			date: new Date()
 		};
 
 		channel.push('shout', message);

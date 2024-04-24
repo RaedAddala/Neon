@@ -1,8 +1,8 @@
 import type { MessageUser } from '../profile';
 
 export interface Message {
-	user: MessageUser;
-	messageId: string;
-	date: Date;
+	id: string;
 	message: string;
+	user: MessageUser;
+	date: string | Date;
 }
