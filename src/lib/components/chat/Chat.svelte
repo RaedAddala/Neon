@@ -10,7 +10,7 @@
 
 	let channel: Channel | null = null;
 
-	const messages: MessageType[] = [];
+	let messages: MessageType[] = [];
 	let currentMessage = '';
 
 	function handleClick(_event: Event) {
@@ -48,6 +48,10 @@
 			.join()
 			.receive('ok', (_resp) => {
 				channel = channel_;
+
+				channel_.on('shout', (message: MessageType) => {
+					messages = [...messages, message];
+				});
 			})
 			.receive('error', (resp) => {
 				console.log('Unable to join', resp);
@@ -59,7 +63,7 @@
 	<h2>Chat</h2>
 
 	<div>
-		{#each messages as message}
+		{#each messages as message (message.id)}
 			<Message {message}></Message>
 		{/each}
 	</div>
