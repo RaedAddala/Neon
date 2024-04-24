@@ -1,4 +1,6 @@
 defmodule LiveChatServiceWeb.ChatChannel do
+  alias Ecto.Changeset
+  alias LiveChatService.Message
   use LiveChatServiceWeb, :channel
 
   @impl true
@@ -21,7 +23,15 @@ defmodule LiveChatServiceWeb.ChatChannel do
   # broadcast to everyone in the current topic (chat:lobby).
   @impl true
   def handle_in("shout", payload, socket) do
-    broadcast(socket, "shout", payload)
+    message_changeset = Message.changeset(%Message{}, payload)
+
+    with %Changeset{changes: message, valid?: true} <- message_changeset,
+         %{user: user_changeset} <- message,
+         %Changeset{changes: user, valid?: true} <- user_changeset do
+      message_struct = %{message | user: user}
+      broadcast(socket, "shout", message_struct)
+    end
+
     {:noreply, socket}
   end
 
