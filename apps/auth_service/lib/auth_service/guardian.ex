@@ -24,4 +24,9 @@ defmodule AuthService.Guardian do
   def resource_from_claims(_claims) do
     {:error, :reason_for_error}
   end
+  def fetch_secret do
+    Application.get_env(:auth_service, AuthServiceWeb.Guardian)
+      |> Keyword.get(:secret_key_file)
+      |> JOSE.JWK.from_pem_file
+end
 end
