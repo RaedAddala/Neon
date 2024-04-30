@@ -8,6 +8,8 @@ defmodule AuthService.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      # Worker to rotate RSA keys
+      AuthService.KeyRotatorWorker,
       AuthServiceWeb.Telemetry,
       AuthService.Repo,
       {DNSCluster, query: Application.get_env(:auth_service, :dns_cluster_query) || :ignore},
