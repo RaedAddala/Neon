@@ -27,3 +27,6 @@ auth_service-*.tar
 
 # file uploads 
 /priv/static/uploads
+
+#path of RSA keys 
+/priv/keys
