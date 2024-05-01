@@ -43,7 +43,7 @@ defmodule AuthServiceWeb.UserController do
 
   defp auth_reply({:ok, user}, conn) do
     conn
-    |> Guardian.Plug.sign_in(user)
+    |> Guardian.Plug.sign_in(user, %{username: user.username})
     |> parse_auth_response()
   end
 
