@@ -25,6 +25,10 @@ defmodule AuthServiceWeb.Endpoint do
     gzip: false,
     only: AuthServiceWeb.static_paths()
 
+  plug Plug.Static,
+    at: "/uploads",
+    from: {:auth_service, "priv/static/uploads/profile_pictures"}
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
@@ -39,8 +43,9 @@ defmodule AuthServiceWeb.Endpoint do
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
+  # Limit upload
   plug Plug.Parsers,
-    parsers: [:urlencoded, :multipart, :json],
+    parsers: [:urlencoded, {:multipart, length: 2_000_000}, :json],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
 
