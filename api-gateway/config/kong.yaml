@@ -1,0 +1,18 @@
+_format_version: "2.1"
+_transform: true
+
+services:
+- name: auth-service
+  host: localhost
+  port: 5173
+  protocol: http
+  routes:
+  - name: login
+    paths:
+    - /test
+- name: test
+  url: http://host.docker.internal:3000/
+  routes: 
+    - name: test 
+      paths: 
+      - /get 
