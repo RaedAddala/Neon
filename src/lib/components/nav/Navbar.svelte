@@ -1,21 +1,17 @@
 <script lang="ts">
-	import type { NavbarItemContent } from '$lib/types';
-	import NavbarItem from './NavbarItem.svelte';
-
-	const NavbarItems: NavbarItemContent[] = [
-		{
-			href: '/',
-			text: 'Home'
-		},
-		{
-			href: '/stream',
-			text: 'Stream'
-		}
-	];
+	import Logo from './Logo.svelte';
+	import MainNav from './MainNav.svelte';
+	import Search from './Search.svelte';
+	import ProfileNav from './ProfileNav.svelte';
 </script>
 
-<div class="flex gap-2">
-	{#each NavbarItems as navbarItem}
-		<NavbarItem content={navbarItem} />
-	{/each}
+<div class="border-b">
+	<div class="flex h-16 items-center px-4">
+		<Logo />
+		<MainNav class="mx-6" />
+		<div class="ml-auto flex items-center space-x-4">
+			<Search />
+			<ProfileNav />
+		</div>
+	</div>
 </div>

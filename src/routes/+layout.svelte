@@ -1,6 +1,8 @@
 <script lang="ts">
 	import '../app.css';
 
+	import { ModeWatcher } from 'mode-watcher';
+
 	import Navbar from '$lib/components/nav/Navbar.svelte';
 </script>
 
@@ -8,7 +10,9 @@
 	<title>Neon</title>
 </svelte:head>
 
-<div class="m-4 grid gap-2">
+<ModeWatcher />
+
+<div class="grid gap-2">
 	<Navbar />
 	<main>
 		<slot />

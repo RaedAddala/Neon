@@ -1,4 +1,4 @@
-export interface NavbarItemContent {
+export interface MainNavItemContent {
 	href: string;
 	text: string;
 }
