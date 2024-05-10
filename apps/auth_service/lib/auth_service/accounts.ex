@@ -74,7 +74,9 @@ defmodule AuthService.Accounts do
       if(
         (upload = attrs["profile_picture"]) && ImageChecker.is_image?(attrs["profile_picture"])
       ) do
-        file = FileUploader.upload_file(upload, "./priv/static/uploads/profile_pictures/")
+        path= :code.priv_dir(:auth_service)
+        |> Path.join("static/uploads/profile_pictures/")
+        file = FileUploader.upload_file(upload, path)
         %{attrs | "profile_picture" => "/uploads/#{file}"}
       else
         %{attrs | "profile_picture" => "/uploads/default.jpg"}
