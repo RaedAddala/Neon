@@ -35,6 +35,12 @@ RUN mix local.hex --force && \
 ARG MIX_ENV="dev"
 ENV MIX_ENV=$MIX_ENV
 
+ARG DB_HOST DB_NAME
+ENV DB_HOST=$DB_HOST DB_NAME=$DB_NAME
+
+ARG DB_USERNAME DB_PASSWORD
+ENV DB_USERNAME=$DB_USERNAME DB_PASSWORD=$DB_PASSWORD
+
 # install mix dependencies
 COPY mix.exs mix.lock ./
 RUN mix deps.get --only $MIX_ENV
@@ -94,4 +100,4 @@ USER nobody
 # above and adding an entrypoint. See https://github.com/krallin/tini for details
 # ENTRYPOINT ["/tini", "--"]
 
-CMD ["/app/bin/server"]
+CMD ["sh", "-c", "/app/bin/migrate && /app/bin/server"]

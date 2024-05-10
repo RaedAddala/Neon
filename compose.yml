@@ -1,3 +1,4 @@
 include:
+  - path: apps/auth_service/compose.yml
   - path: apps/streaming_service/compose.yml
   - path: apps/live_chat_service/compose.yml
