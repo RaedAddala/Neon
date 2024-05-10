@@ -14,8 +14,17 @@ defmodule AuthService.KeyRotatorWorker do
   def handle_info(:work, state) do
     # Do the work you desire here
     {private_key, public_key} = generate_rsa_key_pair()
-    File.write!("./priv/keys/secret_key.pem", private_key)
-    File.write!("./priv/keys/public_key.pem", public_key)
+
+    priv_path = :code.priv_dir(:auth_service)
+
+    priv_path
+    |> Path.join("keys/secret_key.pem")
+    |> File.write!(private_key)
+
+    priv_path
+    |> Path.join("keys/public_key.pem")
+    |> File.write!(public_key)
+
     # Reschedule once more
     schedule_work()
     {:noreply, state}
@@ -23,11 +32,11 @@ defmodule AuthService.KeyRotatorWorker do
 
   defp schedule_work() do
     # In 2 hours
-    # TODO: change time to 24 hours
-    Process.send_after(self(), :work, 2 * 60 * 60 * 1000)
+    # TODO: change time to X hours
+    Process.send_after(self(), :work, 24 * 60 * 60 * 1000)
   end
 
-  def generate_rsa_key_pair() do
+  defp generate_rsa_key_pair() do
     {:RSAPrivateKey, _, modulus, publicExponent, _, _, _, _exponent1, _, _, _otherPrimeInfos} =
       rsa_private_key = :public_key.generate_key({:rsa, 2048, 65537})
 
