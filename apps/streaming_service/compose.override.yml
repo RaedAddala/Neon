@@ -1,0 +1,4 @@
+services:
+  streaming-service:
+    ports:
+      - 4000:4000
