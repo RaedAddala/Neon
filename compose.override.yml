@@ -1,12 +1,21 @@
+networks:
+  kong-net:
+    external: false
+
 services:
   auth-service:
     ports:
       - 4000:4000
+    
 
   streaming-service:
     ports:
       - 4002:4000
+    networks:
+      - kong-net
 
   live-chat-service:
     ports:
       - 4004:4000
+    networks:
+      - kong-net

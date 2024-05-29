@@ -11,6 +11,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - kong-net
 
   db:
     image: postgres
@@ -27,6 +29,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - kong-net
 
 volumes:
   db-data:

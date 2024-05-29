@@ -2,7 +2,7 @@ x-kong-config:
   &kong-env
   KONG_DATABASE: ${KONG_DATABASE:-off}
   KONG_PG_DATABASE: ${KONG_PG_DATABASE:-kong}
-  KONG_PG_HOST: db
+  KONG_PG_HOST: kong_db
   KONG_PG_USER: ${KONG_PG_USER:-kong}
   KONG_PG_PASSWORD_FILE: /run/secrets/kong_postgres_password
 
@@ -27,7 +27,7 @@ services:
     command: kong migrations bootstrap
     profiles: [ "database" ]
     depends_on:
-      - db
+      - kong_db
     environment:
       <<: *kong-env
     secrets:
@@ -41,7 +41,7 @@ services:
     command: kong migrations up && kong migrations finish
     profiles: [ "database" ]
     depends_on:
-      - db
+      - kong_db
     environment:
       <<: *kong-env
     secrets:
@@ -95,7 +95,7 @@ services:
     security_opt:
       - no-new-privileges
 
-  db:
+  kong_db:
     image: postgres:9.5
     profiles: [ "database" ]
     environment:
