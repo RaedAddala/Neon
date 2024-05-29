@@ -1,0 +1,35 @@
+<script lang="ts">
+	import * as Form from '$lib/components/ui/form';
+	import { Input } from '$lib/components/ui/input';
+	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { loginFormSchema, type LoginFormSchema } from './schema.zod';
+
+	export let data: SuperValidated<Infer<LoginFormSchema>>;
+
+	const form = superForm(data, {
+		validators: zodClient(loginFormSchema)
+	});
+
+	const { form: formData, enhance } = form;
+</script>
+
+<form method="POST" use:enhance>
+	<Form.Field {form} name="email">
+		<Form.Control let:attrs>
+			<Form.Label>Email</Form.Label>
+			<Input {...attrs} bind:value={$formData.email} />
+		</Form.Control>
+		<Form.Description>This is your account email.</Form.Description>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Field {form} name="password">
+		<Form.Control let:attrs>
+			<Form.Label>Password</Form.Label>
+			<Input {...attrs} bind:value={$formData.password} type="password" />
+		</Form.Control>
+		<Form.Description>This is your password.</Form.Description>
+		<Form.FieldErrors />
+	</Form.Field>
+	<Form.Button type="submit">Login</Form.Button>
+</form>
