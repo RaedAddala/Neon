@@ -2,7 +2,7 @@ import { z } from 'zod';
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
-export const signinFormSchema = z.object({
+export const signupFormSchema = z.object({
 	profile_picture: z
 		.any()
 		.refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
@@ -18,4 +18,4 @@ export const signinFormSchema = z.object({
 	})
 });
 
-export type SigninFormSchema = typeof signinFormSchema;
+export type SignupFormSchema = typeof signupFormSchema;

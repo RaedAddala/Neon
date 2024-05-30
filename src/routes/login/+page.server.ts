@@ -25,7 +25,7 @@ export const actions = {
 		//login request here
 
 		const data = form.data;
-		const res: Response = await apiGatewayFetch('/login', {
+		const res: Response = await apiGatewayFetch('/auth/login', {
 			method: 'POST',
 			body: JSON.stringify({ user: data })
 		});
