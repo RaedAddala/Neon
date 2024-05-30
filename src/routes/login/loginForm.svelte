@@ -14,7 +14,7 @@
 	const { form: formData, enhance } = form;
 </script>
 
-<form method="POST" use:enhance>
+<form method="POST" use:enhance class="flex flex-col">
 	<Form.Field {form} name="email">
 		<Form.Control let:attrs>
 			<Form.Label>Email</Form.Label>
@@ -31,7 +31,6 @@
 		<Form.Description>This is your password.</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Button type="submit">Login</Form.Button>
+	<Form.Button type="submit" style="background-color:#F7DD72" class="w-full">Login</Form.Button>
+	<div>New here? <a href="/signup" style="color: #5AB1BB;"> Sign up here </a></div>
 </form>
-<div>New here? <a href="/signup" style="color: #5AB1BB;"> Sign up here </a></div>
-

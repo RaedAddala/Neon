@@ -11,10 +11,9 @@
 </svelte:head>
 
 <ModeWatcher />
-
-<div class="grid gap-2">
+<div class="flex h-full max-h-full flex-col justify-start">
 	<Navbar />
-	<main>
+	<main class="h-full">
 		<slot />
 	</main>
 </div>

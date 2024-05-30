@@ -51,6 +51,6 @@
 		<Form.FieldErrors />
 	</Form.Field>
 
-	<Form.Button type="submit">Sign up</Form.Button>
+	<Form.Button type="submit" style="background-color:#F7DD72" class="w-full">Sign up</Form.Button>
 </form>
 <div>Already have a friend? <a href="/login" style="color: #5AB1BB;"> Login here </a></div>
