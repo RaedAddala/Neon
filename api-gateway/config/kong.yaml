@@ -3,16 +3,22 @@ _transform: true
 
 services:
 - name: auth-service
-  host: localhost
-  port: 5173
-  protocol: http
+  url: http://auth-service:4000/
   routes:
-  - name: login
+  - name: auth
     paths:
-    - /test
-- name: test
-  url: http://host.docker.internal:3000/
-  routes: 
-    - name: test 
-      paths: 
-      - /get 
+    - /auth/*
+
+- name: live-chat-service
+  url: https://live-chat-service:4000/
+  routes:
+  - name: live-chat
+    paths: 
+    - /live-chat/*
+
+- name: streaming-service
+  url: https://streaming-service:4000/
+  routes:
+  - name: streaming
+    paths: 
+    - /stream/*
