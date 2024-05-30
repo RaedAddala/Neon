@@ -2,23 +2,23 @@ _format_version: "2.1"
 _transform: true
 
 services:
-- name: auth-service
-  url: http://auth-service:4000/
-  routes:
-  - name: auth
-    paths:
-    - /auth/*
+  - name: auth-service
+    url: http://auth-service:4000/
+    routes:
+      - name: auth
+        paths:
+          - /auth/*
 
-- name: live-chat-service
-  url: http://live-chat-service:4000/
-  routes:
-  - name: live-chat
-    paths: 
-    - /live-chat/*
+  - name: live-chat-service
+    url: http://live-chat-service:4000/
+    routes:
+      - name: live-chat
+        paths:
+          - /live-chat/*
 
-- name: streaming-service
-  url: http://streaming-service:4000/
-  routes:
-  - name: streaming
-    paths: 
-    - /stream/*
+  - name: streaming-service
+    url: http://streaming-service:4000/
+    routes:
+      - name: streaming
+        paths:
+          - /stream/*

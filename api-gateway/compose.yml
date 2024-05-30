@@ -1,5 +1,4 @@
-x-kong-config:
-  &kong-env
+x-kong-config: &kong-env
   KONG_DATABASE: ${KONG_DATABASE:-off}
   KONG_PG_DATABASE: ${KONG_PG_DATABASE:-kong}
   KONG_PG_HOST: kong_db
@@ -17,37 +16,29 @@ volumes:
       type: tmpfs
       device: tmpfs
 
-networks:
-  kong-net:
-    external: false
-
 services:
   kong-migrations:
     image: "${KONG_DOCKER_TAG:-kong:latest}"
     command: kong migrations bootstrap
-    profiles: [ "database" ]
+    profiles: ["database"]
     depends_on:
       - kong_db
     environment:
       <<: *kong-env
     secrets:
       - kong_postgres_password
-    networks:
-      - kong-net
     restart: on-failure
 
   kong-migrations-up:
     image: "${KONG_DOCKER_TAG:-kong:latest}"
     command: kong migrations up && kong migrations finish
-    profiles: [ "database" ]
+    profiles: ["database"]
     depends_on:
       - kong_db
     environment:
       <<: *kong-env
     secrets:
       - kong_postgres_password
-    networks:
-      - kong-net
     restart: on-failure
 
   kong:
@@ -66,8 +57,6 @@ services:
       KONG_DECLARATIVE_CONFIG: "/opt/kong/kong.yaml"
     secrets:
       - kong_postgres_password
-    networks:
-      - kong-net
     ports:
       # The following two environment variables default to an insecure value (0.0.0.0)
       # according to the CIS Security test.
@@ -82,7 +71,7 @@ services:
       - "127.0.0.1:8444:8444/tcp"
       - "127.0.0.1:8002:8002/tcp"
     healthcheck:
-      test: [ "CMD", "kong", "health" ]
+      test: ["CMD", "kong", "health"]
       interval: 10s
       timeout: 10s
       retries: 10
@@ -97,7 +86,7 @@ services:
 
   kong_db:
     image: postgres:9.5
-    profiles: [ "database" ]
+    profiles: ["database"]
     environment:
       POSTGRES_DB: ${KONG_PG_DATABASE:-kong}
       POSTGRES_USER: ${KONG_PG_USER:-kong}
@@ -112,7 +101,7 @@ services:
           "-d",
           "${KONG_PG_DATABASE:-kong}",
           "-U",
-          "${KONG_PG_USER:-kong}"
+          "${KONG_PG_USER:-kong}",
         ]
       interval: 30s
       timeout: 30s
@@ -120,8 +109,6 @@ services:
     restart: on-failure
     stdin_open: true
     tty: true
-    networks:
-      - kong-net
     volumes:
       - kong_data:/var/lib/postgresql/data
 
