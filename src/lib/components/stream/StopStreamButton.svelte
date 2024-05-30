@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { mediaStream } from '$lib/stores';
 
-	function handleClick(_event: Event) {
+	function handleClick() {
 		const tracks = $mediaStream?.getTracks();
 
 		tracks?.forEach((track) => track.stop());
