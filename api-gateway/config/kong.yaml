@@ -10,14 +10,14 @@ services:
     - /auth/*
 
 - name: live-chat-service
-  url: https://live-chat-service:4000/
+  url: http://live-chat-service:4000/
   routes:
   - name: live-chat
     paths: 
     - /live-chat/*
 
 - name: streaming-service
-  url: https://streaming-service:4000/
+  url: http://streaming-service:4000/
   routes:
   - name: streaming
     paths: 
