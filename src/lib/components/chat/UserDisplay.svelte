@@ -10,7 +10,7 @@
 <Root>
 	<Trigger><span>{`@${user.username}`}</span>:</Trigger>
 	<Content>
-		<div class="flex px-2 py-1">
+		<div class="flex items-center px-2 py-1">
 			<UserAvatar {user} />
 			<Button data-sveltekit-reload variant="link" class="p-2" href={`/watch/${user.username}`}>
 				{`${user.username}`}
