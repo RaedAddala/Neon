@@ -1,7 +1,7 @@
 defmodule AuthService.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
-
+  @derive {Jason.Encoder, except: [:password, :__meta__]}
   @primary_key {:id, Ecto.UUID, autogenerate: true}
   schema "users" do
     field(:username, :string)
@@ -18,7 +18,7 @@ defmodule AuthService.Accounts.User do
     |> cast(attrs, [:username, :email, :password, :profile_picture])
     |> validate_required([:username, :email, :password])
     |> unique_constraint(:email)
-    |>unique_constraint(:username)
+    |> unique_constraint(:username)
     |> validate_format(:email, ~r/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
     |> validate_format(:password, ~r/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
     |> put_password_hash()
