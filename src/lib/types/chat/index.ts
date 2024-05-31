@@ -1,8 +1,8 @@
-import type { MessageUser } from '../profile';
+import type { PartialUser } from '../profile';
 
 export interface Message {
 	id: string;
 	message: string;
-	user: MessageUser;
+	user: PartialUser;
 	date: string | Date;
 }

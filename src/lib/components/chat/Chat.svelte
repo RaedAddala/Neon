@@ -1,10 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import type { Message as MessageType } from '$lib/types';
-	import { Channel, Socket } from 'phoenix';
-	import { onMount } from 'svelte';
+	import { Channel } from 'phoenix';
+	import { onMount, tick } from 'svelte';
 	import Message from './Message.svelte';
 	import { user } from '$lib/stores';
+	import { ScrollArea } from '../ui/scroll-area';
+	import { Textarea } from '../ui/textarea';
+	import { Button } from '../ui/button';
+	import { Separator } from '../ui/separator';
+	import { getSocket, getChannel, getChatTopic } from '@/utils/socket';
 
 	const { username } = $page.params;
 
@@ -13,7 +18,12 @@
 	let messages: MessageType[] = [];
 	let currentMessage = '';
 
-	function handleClick(_event: Event) {
+	let scrollArea: HTMLDivElement | null = null;
+	let messagesContainer: HTMLDivElement | null = null;
+
+	let isAtChatEnd = true;
+
+	function sendMessage() {
 		const messageContents = currentMessage.trim();
 		if (messageContents === '') {
 			return;
@@ -37,39 +47,69 @@
 		currentMessage = '';
 	}
 
-	onMount(() => {
-		const socket = new Socket('ws://localhost:4000/socket');
+	async function receiveMessage(message: MessageType) {
+		messages[messages.length] = message;
 
-		socket.connect();
+		if (!messagesContainer || !isAtChatEnd) {
+			return;
+		}
 
-		const channel_ = socket.channel(`chat:${username}`);
+		await tick();
 
-		channel_
-			.join()
-			.receive('ok', (_resp) => {
-				channel = channel_;
+		messagesContainer.scrollIntoView(false);
+	}
 
-				channel_.on('shout', (message: MessageType) => {
-					messages = [...messages, message];
-				});
-			})
-			.receive('error', (resp) => {
-				console.log('Unable to join', resp);
-			});
+	function handleClick() {
+		sendMessage();
+	}
+
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key !== 'Enter' || event.shiftKey) {
+			return;
+		}
+
+		event.preventDefault();
+		sendMessage();
+	}
+
+	function handleScrollend() {
+		if (!scrollArea || !messagesContainer) {
+			return;
+		}
+
+		const { bottom: scrollAreaBottom } = scrollArea.getBoundingClientRect();
+		const { bottom: messagesContainerBottom } = messagesContainer.getBoundingClientRect();
+
+		isAtChatEnd = messagesContainerBottom <= scrollAreaBottom;
+	}
+
+	onMount(async () => {
+		const socket = getSocket('live-chat');
+		channel = await getChannel(socket, getChatTopic(username));
+
+		channel.on('shout', receiveMessage);
 	});
 </script>
 
-<div>
-	<h2>Chat</h2>
-
-	<div>
-		{#each messages as message (message.id)}
-			<Message {message}></Message>
-		{/each}
+<div class="flex flex-col">
+	<div class="px-2 py-1">Chat</div>
+	<Separator />
+	<div bind:this={scrollArea} on:scrollend|capture={handleScrollend} class="flex-1">
+		<ScrollArea class="h-0 min-h-full px-2 pb-1">
+			<div bind:this={messagesContainer}>
+				{#each messages as message (message.id)}
+					<Message {message}></Message>
+				{/each}
+			</div>
+		</ScrollArea>
 	</div>
 
-	<div>
-		<input bind:value={currentMessage} />
-		<button type="button" on:click={handleClick}>Send</button>
+	<div class="flex gap-2">
+		<Textarea
+			class="h-10 min-h-0 resize-none py-2"
+			bind:value={currentMessage}
+			on:keydown={handleKeyDown}
+		/>
+		<Button on:click={handleClick}>Send</Button>
 	</div>
 </div>
