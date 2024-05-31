@@ -1,14 +1,8 @@
 <script lang="ts">
-	import { get } from 'svelte/store';
 	import type { PageData } from './$types';
 	import SignupForm from './signupForm.svelte';
-	import { auth } from '../../../lib/stores';
-	import { goto } from '$app/navigation';
-	export let data: PageData;
 
-	if (get(auth) != null) {
-		goto('/');
-	}
+	export let data: PageData;
 </script>
 
 <div
