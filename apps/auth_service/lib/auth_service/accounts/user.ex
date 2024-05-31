@@ -21,6 +21,7 @@ defmodule AuthService.Accounts.User do
     |> unique_constraint(:username)
     |> validate_format(:email, ~r/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
     |> validate_format(:password, ~r/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)
+    |> validate_format(:username, ~r/^(?!.*[^\w-]).{1,39}$/)
     |> put_password_hash()
   end
 
