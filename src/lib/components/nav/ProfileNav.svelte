@@ -2,7 +2,6 @@
 	import { user } from '@/stores';
 	import UserNav from './UserNav.svelte';
 	import { Button } from '../ui/button';
-
 </script>
 
 {#if $user}
