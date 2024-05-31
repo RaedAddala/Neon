@@ -26,7 +26,7 @@ export const actions = {
 			const data = form.data;
 			const auth: Auth = await apiGatewayFetch('/auth/login', {
 				method: 'POST',
-				body: JSON.stringify({ user: data })
+				body: JSON.stringify(data)
 			});
 			const userId: string | undefined = jwtDecode(auth.token).sub;
 
@@ -36,7 +36,7 @@ export const actions = {
 				})
 			)?.data;
 			user = UserMapper(user);
-			
+
 			return {
 				form,
 				auth,
