@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import type { Message as MessageType } from '$lib/types';
-	import { Channel, Socket } from 'phoenix';
+	import { Channel } from 'phoenix';
 	import { onMount, tick } from 'svelte';
 	import Message from './Message.svelte';
 	import { user } from '$lib/stores';
@@ -9,6 +9,7 @@
 	import { Textarea } from '../ui/textarea';
 	import { Button } from '../ui/button';
 	import { Separator } from '../ui/separator';
+	import { getSocket, getChannel, getChatTopic } from '@/utils/socket';
 
 	const { username } = $page.params;
 
@@ -82,23 +83,11 @@
 		isAtChatEnd = messagesContainerBottom <= scrollAreaBottom;
 	}
 
-	onMount(() => {
-		const socket = new Socket('ws://localhost:4000/socket');
+	onMount(async () => {
+		const socket = getSocket('live-chat');
+		channel = await getChannel(socket, getChatTopic(username));
 
-		socket.connect();
-
-		const channel_ = socket.channel(`chat:${username}`);
-
-		channel_
-			.join()
-			.receive('ok', () => {
-				channel = channel_;
-
-				channel_.on('shout', receiveMessage);
-			})
-			.receive('error', (resp) => {
-				console.log('Unable to join', resp);
-			});
+		channel.on('shout', receiveMessage);
 	});
 </script>
 
