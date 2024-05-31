@@ -5,8 +5,20 @@
 	import type { User } from '$lib/types';
 	import { writableAuth, writableUser } from '../../stores';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	export let user: User;
+
+	function logout() {
+		if (!browser) {
+			return;
+		}
+
+		writableAuth.set(null);
+		writableUser.set(null);
+
+		goto('/');
+	}
 </script>
 
 <DropdownMenu.Root>
@@ -33,12 +45,6 @@
 			<DropdownMenu.Item>Profile</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
-		<DropdownMenu.Item
-			on:click={(e) => {
-				writableAuth.set(null);
-				writableUser.set(null);
-				goto('/login');
-			}}>Log out</DropdownMenu.Item
-		>
+		<DropdownMenu.Item on:click={logout}>Log out</DropdownMenu.Item>
 	</DropdownMenu.Content>
 </DropdownMenu.Root>

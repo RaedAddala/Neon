@@ -3,9 +3,10 @@ import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { loginFormSchema } from './schema.zod.js';
-import apiGatewayFetch from '@/utils/apiGatewayFetch.js';
-import { UserMapper, type Auth, type User } from '@/types';
+import type { FetchData, Auth, UserFetchData } from '@/types';
 import { jwtDecode } from 'jwt-decode';
+import { getFetchWrapper } from '@/utils/fetch';
+import { userMapper } from '@/utils/user';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -22,20 +23,25 @@ export const actions = {
 			});
 		}
 
+		const apiGatewayFetch = getFetchWrapper(event.fetch);
+
 		try {
 			const data = form.data;
 			const auth: Auth = await apiGatewayFetch('/auth/login', {
 				method: 'POST',
 				body: JSON.stringify(data)
 			});
-			const userId: string | undefined = jwtDecode(auth.token).sub;
 
-			let user: User = (
-				await apiGatewayFetch(`/auth/users/${userId}`, {
+			const userId = jwtDecode(auth.token).sub as string;
+
+			const { data: fetchData } = await apiGatewayFetch<FetchData<UserFetchData>>(
+				`/auth/users/${userId}`,
+				{
 					method: 'GET'
-				})
-			)?.data;
-			user = UserMapper(user);
+				}
+			);
+
+			const user = userMapper(fetchData);
 
 			return {
 				form,

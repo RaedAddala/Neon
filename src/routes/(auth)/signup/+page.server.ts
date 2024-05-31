@@ -3,9 +3,10 @@ import { superValidate, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { signupFormSchema } from './schema.zod.js';
 import type { PageServerLoad } from './$types.js';
-import { UserMapper, type Auth, type User } from '@/types';
-import apiGatewayFetch from '@/utils/apiGatewayFetch.js';
+import type { Auth, FetchData, UserFetchData } from '@/types';
 import { jwtDecode } from 'jwt-decode';
+import { getFetchWrapper } from '@/utils/fetch';
+import { userMapper } from '@/utils/user';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -32,20 +33,24 @@ export const actions = {
 			return formData;
 		}, new FormData());
 
+		const apiGatewayFetch = getFetchWrapper(event.fetch);
+
 		try {
 			const auth: Auth = await apiGatewayFetch('/auth/register', {
 				method: 'POST',
 				body: formData
 			});
-			const userId: string | undefined = jwtDecode(auth.token).sub;
 
-			let user: User = (
-				await apiGatewayFetch(`/auth/users/${userId}`, {
+			const userId = jwtDecode(auth.token).sub as string;
+
+			const { data: fetchData } = await apiGatewayFetch<FetchData<UserFetchData>>(
+				`/auth/users/${userId}`,
+				{
 					method: 'GET'
-				})
-			)?.data;
+				}
+			);
 
-			user=UserMapper(user)
+			const user = userMapper(fetchData);
 
 			return withFiles({
 				form,

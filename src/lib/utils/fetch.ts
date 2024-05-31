@@ -1,16 +1,16 @@
-// src/lib/fetchWrapper.ts
-
 export interface FetchWrapperOptions extends RequestInit {
 	headers?: HeadersInit;
 }
 
 /**
  * Wrapper function around SvelteKit's fetch
+ * @param {function} fetch - SvelteKit fetch function
  * @param {string} url - The URL to fetch.
  * @param {FetchWrapperOptions} options - Fetch options such as method, headers, body, etc.
  * @returns {Promise<T>} - The fetch response.
  */
 export async function fetchWrapper<T>(
+	fetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>,
 	url: string,
 	{ body, headers, ...options }: FetchWrapperOptions = {}
 ): Promise<T> {
@@ -47,4 +47,13 @@ export async function fetchWrapper<T>(
 		console.error(`Fetch error: ${(error as Error).message}`);
 		throw error;
 	}
+}
+
+export function getFetchWrapper(
+	fetch: (input: RequestInfo | URL, init?: RequestInit | undefined) => Promise<Response>
+) {
+	const baseURL = import.meta.env.VITE_BACKEND_URL;
+
+	return <T>(url: string, options: FetchWrapperOptions = {}): Promise<T> =>
+		fetchWrapper(fetch, baseURL + url, options);
 }

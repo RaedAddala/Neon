@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	import type { PageData } from './$types';
 	import LoginForm from './loginForm.svelte';
 	import { goto } from '$app/navigation';
@@ -10,7 +9,6 @@
 	if (get(auth) != null) {
 		goto('/');
 	}
-
 </script>
 
 <div

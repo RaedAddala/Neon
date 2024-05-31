@@ -3,22 +3,16 @@ export interface User {
 	username: string;
 	email: string;
 	profilePicture: string;
-	creationDate: Date;
+	insertedAt: Date;
+	updatedAt: Date;
 	followers: User[];
 	following: User[];
 }
 
-export const UserMapper = (user: any): User => {
-	const mappedUser: User = {
-		id: user.id,
-		username: user.username,
-		email: user.email,
-		profilePicture: user.profile_picture,
-		creationDate: new Date(user.inserted_at),
-		followers: [],
-		following: []
-	};
-	return mappedUser;
-};
+export interface UserFetchData extends Omit<User, 'profilePicture' | 'insertedAt' | 'updatedAt'> {
+	profile_picture: string;
+	inserted_at: string;
+	updated_at: string;
+}
 
 export type MessageUser = Pick<User, 'username'> & Partial<Pick<User, 'profilePicture'>>;
