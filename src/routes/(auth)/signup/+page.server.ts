@@ -1,4 +1,4 @@
-import { fail, type Actions } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { signupFormSchema } from './schema.zod.js';
@@ -25,12 +25,17 @@ export const actions = {
 		//signup request here
 
 		const data = form.data;
-		const res: Auth = await apiGatewayFetch('/auth/register', {
-			method: 'POST',
-			body: JSON.stringify({ user: data })
-		});
+		try {
+			const res: Auth = await apiGatewayFetch('/auth/register', {
+				method: 'POST',
+				body: JSON.stringify(data)
+			});
 
-		writableAuth.set(res);
+			writableAuth.set(res);
+		} catch (err) {
+			return fail(400, { form, message: 'Sign-up failed - try again ' });
+		}
+		redirect(303, '/');
 		return {
 			form
 		};

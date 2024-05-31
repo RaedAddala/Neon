@@ -4,6 +4,8 @@
 	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { loginFormSchema, type LoginFormSchema } from './schema.zod';
+	import { page } from '$app/stores';
+
 
 	export let data: SuperValidated<Infer<LoginFormSchema>>;
 
@@ -12,6 +14,7 @@
 	});
 
 	const { form: formData, enhance } = form;
+	$: errorMessage = $page.form?.message;
 </script>
 
 <form method="POST" use:enhance class="flex flex-col">
@@ -32,5 +35,8 @@
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Button type="submit" style="background-color:#F7DD72" class="w-full">Login</Form.Button>
+	{#if errorMessage != undefined}
+		<div class="text-red-900">{errorMessage}</div>
+	{/if}
 	<div>New here? <a href="/signup" style="color: #5AB1BB;"> Sign up here </a></div>
 </form>

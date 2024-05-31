@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import SigninForm from './signupForm.svelte';
+	import SignupForm from './signupForm.svelte';
 	export let data: PageData;
 </script>
 
@@ -18,7 +18,7 @@
 			<div class="relative z-10 mb-5 text-center text-lg font-bold md:text-2xl">
 				Welcome To Neon!
 			</div>
-			<SigninForm data={data.form} />
+			<SignupForm data={data.form} />
 		</div>
 	</div>
 </div>
