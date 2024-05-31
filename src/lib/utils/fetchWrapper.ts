@@ -10,10 +10,7 @@ export interface FetchWrapperOptions extends RequestInit {
  * @param {FetchWrapperOptions} options - Fetch options such as method, headers, body, etc.
  * @returns {Promise<Response>} - The fetch response.
  */
-export async function fetchWrapper(
-	url: string,
-	options: FetchWrapperOptions = {}
-): Promise<Response> {
+export async function fetchWrapper<T>(url: string, options: FetchWrapperOptions = {}): Promise<T> {
 	const defaultHeaders: HeadersInit = {
 		'Content-Type': 'application/json'
 		// Add any other default headers here
@@ -42,7 +39,7 @@ export async function fetchWrapper(
 		return response.json();
 	} catch (error) {
 		// Handle or log the error as needed
-		console.error(`Fetch error: ${error.message}`);
+		console.error(`Fetch error: ${(error as Error).message}`);
 		throw error;
 	}
 }

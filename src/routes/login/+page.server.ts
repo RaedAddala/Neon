@@ -3,7 +3,7 @@ import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { loginFormSchema } from './schema.zod.js';
-import apiGatewayFetch from '../../utils/apiGatewayFetch.js';
+import apiGatewayFetch from '@/utils/apiGatewayFetch.js';
 import type { Auth } from '../../lib/types/index.js';
 import { writableAuth } from '../../lib/stores/index.js';
 
@@ -25,12 +25,12 @@ export const actions = {
 		//login request here
 
 		const data = form.data;
-		const res: Response = await apiGatewayFetch('/auth/login', {
+		const res: Auth = await apiGatewayFetch('/auth/login', {
 			method: 'POST',
 			body: JSON.stringify({ user: data })
 		});
 
-		writableAuth.set(res as Auth);
+		writableAuth.set(res);
 
 		return {
 			form
