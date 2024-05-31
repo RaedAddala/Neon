@@ -22,7 +22,6 @@ export const actions = {
 			});
 		}
 
-		//login request here
 		try {
 			const data = form.data;
 			const res: Auth = await apiGatewayFetch('/auth/login', {
@@ -32,7 +31,7 @@ export const actions = {
 
 			writableAuth.set(res);
 		} catch (err) {
-			return fail(400, { form, message: 'login unsuccessful - verify your credentials' });
+			return fail(400, { form, message: 'Login unsuccessful - verify your credentials' });
 		}
 
 		redirect(303, '/');

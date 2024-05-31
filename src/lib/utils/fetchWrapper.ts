@@ -10,18 +10,23 @@ export interface FetchWrapperOptions extends RequestInit {
  * @param {FetchWrapperOptions} options - Fetch options such as method, headers, body, etc.
  * @returns {Promise<T>} - The fetch response.
  */
-export async function fetchWrapper<T>(url: string, options: FetchWrapperOptions = {}): Promise<T> {
-	const defaultHeaders: HeadersInit = {
-		'Content-Type': 'application/json'
-		// Add any other default headers here
-	};
+export async function fetchWrapper<T>(
+	url: string,
+	{ body, headers, ...options }: FetchWrapperOptions = {}
+): Promise<T> {
+	const defaultHeaders: HeadersInit = {};
+
+	if (!(body instanceof FormData)) {
+		defaultHeaders['Content-Type'] = 'application/json';
+	}
 
 	const config: FetchWrapperOptions = {
-		...options,
+		body,
 		headers: {
 			...defaultHeaders,
-			...options.headers
-		}
+			...headers
+		},
+		...options
 	};
 
 	try {

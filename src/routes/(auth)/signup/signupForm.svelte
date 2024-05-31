@@ -1,10 +1,11 @@
 <script lang="ts">
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
-	import { type SuperValidated, type Infer, superForm } from 'sveltekit-superforms';
+	import { type SuperValidated, type Infer, superForm, fileProxy } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { signupFormSchema, type SignupFormSchema } from './schema.zod';
 	import { page } from '$app/stores';
+	import { FileInput } from '@/components/ui/file-input';
 
 	export let data: SuperValidated<Infer<SignupFormSchema>>;
 
@@ -13,6 +14,8 @@
 	});
 
 	const { form: formData, enhance } = form;
+
+	const file = fileProxy(formData, 'profile_picture');
 
 	$: errorMessage = $page.form?.message;
 </script>
@@ -39,7 +42,7 @@
 	<Form.Field {form} name="profile_picture">
 		<Form.Control let:attrs>
 			<Form.Label>Profile Picture</Form.Label>
-			<Input type="file" {...attrs} bind:value={$formData.profile_picture} />
+			<FileInput {...attrs} bind:files={$file} />
 		</Form.Control>
 		<Form.Description>Let us see your pretty little face.</Form.Description>
 		<Form.FieldErrors />

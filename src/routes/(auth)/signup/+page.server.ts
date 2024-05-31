@@ -1,5 +1,5 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms';
+import { superValidate, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { signupFormSchema } from './schema.zod.js';
 import type { PageServerLoad } from './$types.js';
@@ -17,27 +17,32 @@ export const actions = {
 		const form = await superValidate(event, zod(signupFormSchema));
 
 		if (!form.valid) {
-			return fail(400, {
-				form
-			});
+			return fail(
+				400,
+				withFiles({
+					form
+				})
+			);
 		}
 
-		//signup request here
+		const formData = Object.entries(form.data).reduce((formData, [key, value]) => {
+			if (value) {
+				formData.append(key, value);
+			}
+			return formData;
+		}, new FormData());
 
-		const data = form.data;
 		try {
 			const res: Auth = await apiGatewayFetch('/auth/register', {
 				method: 'POST',
-				body: JSON.stringify(data)
+				body: formData
 			});
 
 			writableAuth.set(res);
 		} catch (err) {
-			return fail(400, { form, message: 'Sign-up failed - try again ' });
+			return fail(400, withFiles({ form, message: 'Sign-up failed - try again' }));
 		}
+
 		redirect(303, '/');
-		return {
-			form
-		};
 	}
 } satisfies Actions;
