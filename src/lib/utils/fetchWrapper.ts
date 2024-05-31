@@ -8,7 +8,7 @@ export interface FetchWrapperOptions extends RequestInit {
  * Wrapper function around SvelteKit's fetch
  * @param {string} url - The URL to fetch.
  * @param {FetchWrapperOptions} options - Fetch options such as method, headers, body, etc.
- * @returns {Promise<Response>} - The fetch response.
+ * @returns {Promise<T>} - The fetch response.
  */
 export async function fetchWrapper<T>(url: string, options: FetchWrapperOptions = {}): Promise<T> {
 	const defaultHeaders: HeadersInit = {
