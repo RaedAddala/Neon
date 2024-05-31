@@ -3,8 +3,9 @@ import { superValidate, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { signupFormSchema } from './schema.zod.js';
 import type { PageServerLoad } from './$types.js';
-import type { Auth } from '@/types';
+import { UserMapper, type Auth, type User } from '@/types';
 import apiGatewayFetch from '@/utils/apiGatewayFetch.js';
+import { jwtDecode } from 'jwt-decode';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -36,10 +37,20 @@ export const actions = {
 				method: 'POST',
 				body: formData
 			});
+			const userId: string | undefined = jwtDecode(auth.token).sub;
+
+			let user: User = (
+				await apiGatewayFetch(`/auth/users/${userId}`, {
+					method: 'GET'
+				})
+			)?.data;
+
+			user=UserMapper(user)
 
 			return withFiles({
 				form,
-				auth
+				auth,
+				user
 			});
 		} catch (err) {
 			return fail(400, withFiles({ form, message: 'Sign-up failed - try again' }));
