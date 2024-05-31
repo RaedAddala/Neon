@@ -1,11 +1,10 @@
 import type { PageServerLoad, Actions } from './$types.js';
-import { error, fail, redirect } from '@sveltejs/kit';
-import { message, superValidate } from 'sveltekit-superforms';
+import { fail } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { loginFormSchema } from './schema.zod.js';
 import apiGatewayFetch from '@/utils/apiGatewayFetch.js';
 import type { Auth } from '@/types';
-import { writableAuth } from '@/stores';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -24,16 +23,17 @@ export const actions = {
 
 		try {
 			const data = form.data;
-			const res: Auth = await apiGatewayFetch('/auth/login', {
+			const auth: Auth = await apiGatewayFetch('/auth/login', {
 				method: 'POST',
 				body: JSON.stringify({ user: data })
 			});
 
-			writableAuth.set(res);
+			return {
+				form,
+				auth
+			};
 		} catch (err) {
 			return fail(400, { form, message: 'Login unsuccessful - verify your credentials' });
 		}
-
-		redirect(303, '/');
 	}
 } satisfies Actions;

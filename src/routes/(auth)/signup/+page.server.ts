@@ -1,10 +1,9 @@
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 import { superValidate, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { signupFormSchema } from './schema.zod.js';
 import type { PageServerLoad } from './$types.js';
 import type { Auth } from '@/types';
-import { writableAuth } from '@/stores';
 import apiGatewayFetch from '@/utils/apiGatewayFetch.js';
 
 export const load: PageServerLoad = async () => {
@@ -33,16 +32,17 @@ export const actions = {
 		}, new FormData());
 
 		try {
-			const res: Auth = await apiGatewayFetch('/auth/register', {
+			const auth: Auth = await apiGatewayFetch('/auth/register', {
 				method: 'POST',
 				body: formData
 			});
 
-			writableAuth.set(res);
+			return withFiles({
+				form,
+				auth
+			});
 		} catch (err) {
 			return fail(400, withFiles({ form, message: 'Sign-up failed - try again' }));
 		}
-
-		redirect(303, '/');
 	}
 } satisfies Actions;

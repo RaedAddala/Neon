@@ -6,7 +6,6 @@
 	import { loginFormSchema, type LoginFormSchema } from './schema.zod';
 	import { page } from '$app/stores';
 
-
 	export let data: SuperValidated<Infer<LoginFormSchema>>;
 
 	const form = superForm(data, {

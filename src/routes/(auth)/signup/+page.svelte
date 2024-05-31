@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import SignupForm from './signupForm.svelte';
+
 	export let data: PageData;
 </script>
 
