@@ -11,11 +11,18 @@ export const signupFormSchema = z.object({
 			'Only .jpg, .jpeg, .png and .webp formats are supported.'
 		)
 		.optional(),
-	username: z.string(),
+	username: z
+		.string()
+		.min(1)
+		.max(39)
+		.refine(
+			(value) => !/[^\w-]/.test(value),
+			"Only alphanumeric characters, '_' and '-' are allowed."
+		),
 	email: z.string().email(),
 	password: z
 		.string()
-		.refine((value) => /^.{8,}$/.test(value), 'At least 8 characters long.')
+		.min(8)
 		.refine((value) => /[a-z]/.test(value), 'Missing a lowercase letter.')
 		.refine((value) => /[A-Z]/.test(value), 'Missing an uppercase letter.')
 		.refine((value) => /[0-9]/.test(value), 'Missing a number.')
