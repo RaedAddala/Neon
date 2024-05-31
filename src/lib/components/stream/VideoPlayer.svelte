@@ -8,6 +8,6 @@
 	}
 </script>
 
-<video bind:this={videoElem} autoplay controls class="max-w-[50rem]">
+<video bind:this={videoElem} autoplay controls class="w-full">
 	<track kind="captions" />
 </video>

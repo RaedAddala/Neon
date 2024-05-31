@@ -7,17 +7,15 @@
 	};
 
 	async function startCapture(displayMediaOptions: DisplayMediaStreamOptions) {
-		let captureStream = null;
-
 		try {
-			captureStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+			return await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
 		} catch (err) {
 			console.error(`Error: ${err}`);
+			return null;
 		}
-		return captureStream;
 	}
 
-	async function handleClick(_event: Event) {
+	async function handleClick() {
 		$mediaStream = await startCapture(displayMediaOptions);
 	}
 </script>

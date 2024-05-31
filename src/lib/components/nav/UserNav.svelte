@@ -1,11 +1,11 @@
 <script lang="ts">
 	import * as DropdownMenu from '../ui/dropdown-menu';
-	import * as Avatar from '../ui/avatar';
 	import Button from '../ui/button/button.svelte';
 	import type { User } from '$lib/types';
 	import { writableAuth, writableUser } from '../../stores';
 	import { goto } from '$app/navigation';
 	import { browser } from '$app/environment';
+	import UserAvatar from '../user/UserAvatar.svelte';
 
 	export let user: User;
 
@@ -24,13 +24,7 @@
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger asChild let:builder>
 		<Button variant="ghost" builders={[builder]} class="relative h-8 w-8 rounded-full">
-			<Avatar.Root class="h-8 w-8">
-				<Avatar.Image
-					src={import.meta.env.VITE_BACKEND_URL + '/auth/' + user.profilePicture}
-					alt={user.username}
-				/>
-				<Avatar.Fallback>{user.username.charAt(0).toUpperCase()}</Avatar.Fallback>
-			</Avatar.Root>
+			<UserAvatar {user} />
 		</Button>
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content class="w-56" align="end">
