@@ -26,7 +26,7 @@ defmodule AuthServiceWeb.UserController do
     end
   end
 
-  def login(conn, %{"user" => %{"email" => email, "password" => password}}) do
+  def login(conn, %{"email" => email, "password" => password}) do
     Accounts.authenticate_user(email, password)
     |> auth_reply(conn)
   end
