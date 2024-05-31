@@ -1,20 +1,20 @@
-import { fail, type Actions } from '@sveltejs/kit';
+import type { PageServerLoad, Actions } from './$types.js';
+import { fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { signupFormSchema } from './schema.zod.js';
-import type { PageServerLoad } from './$types.js';
-import type { Auth } from '../../lib/types/index.js';
-import { writableAuth } from '../../lib/stores/index.js';
+import { loginFormSchema } from './schema.zod.js';
 import apiGatewayFetch from '@/utils/apiGatewayFetch.js';
+import type { Auth } from '@/types';
+import { writableAuth } from '@/stores';
 
 export const load: PageServerLoad = async () => {
 	return {
-		form: await superValidate(zod(signupFormSchema))
+		form: await superValidate(zod(loginFormSchema))
 	};
 };
 export const actions = {
 	default: async (event) => {
-		const form = await superValidate(event, zod(signupFormSchema));
+		const form = await superValidate(event, zod(loginFormSchema));
 
 		if (!form.valid) {
 			return fail(400, {
@@ -22,15 +22,16 @@ export const actions = {
 			});
 		}
 
-		//signup request here
+		//login request here
 
 		const data = form.data;
-		const res: Auth = await apiGatewayFetch('/auth/register', {
+		const res: Auth = await apiGatewayFetch('/auth/login', {
 			method: 'POST',
 			body: JSON.stringify({ user: data })
 		});
 
 		writableAuth.set(res);
+
 		return {
 			form
 		};

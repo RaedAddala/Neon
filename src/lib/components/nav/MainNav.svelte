@@ -8,10 +8,6 @@
 
 	const mainNavItems: MainNavItemContent[] = [
 		{
-			href: '/',
-			text: 'Home'
-		},
-		{
 			href: '/stream',
 			text: 'Stream'
 		}
