@@ -1,3 +1,5 @@
+import { FetchError } from '@/errors/FetchError';
+
 export interface FetchWrapperOptions extends RequestInit {
 	headers?: HeadersInit;
 }
@@ -34,8 +36,7 @@ export async function fetchWrapper<T>(
 
 		// Check if the response status indicates an error
 		if (!response.ok) {
-			const errorText = await response.text();
-			throw new Error(`Error ${response.status}: ${response.statusText} - ${errorText}`);
+			throw new FetchError(response, `Error ${response.status} - ${response.statusText}`);
 		}
 
 		// Optionally, you could add logging here

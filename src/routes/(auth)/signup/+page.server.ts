@@ -7,6 +7,8 @@ import type { Auth, FetchData, UserFetchData } from '@/types';
 import { jwtDecode } from 'jwt-decode';
 import { getFetchWrapper } from '@/utils/fetch';
 import { userMapper } from '@/utils/user';
+import { FetchError } from '@/errors';
+import { handleSignupError } from '@/utils/errors';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -58,6 +60,10 @@ export const actions = {
 				user
 			});
 		} catch (err) {
+			if (err instanceof FetchError) {
+				await handleSignupError(err, form);
+			}
+
 			return fail(400, withFiles({ form, message: 'Sign-up failed - try again' }));
 		}
 	}
