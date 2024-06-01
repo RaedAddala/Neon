@@ -22,7 +22,7 @@ config :auth_service, AuthServiceWeb.Endpoint,
   http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: true,
-  debug_errors: true,
+  debug_errors: false,
   secret_key_base: "5VDdAdCtiTU70TbZ+fiyAjPPrBjo/6vGjRlRn5wSEGiLJ7WFrHxQWP+3hktuMQ+h",
   watchers: []
 
