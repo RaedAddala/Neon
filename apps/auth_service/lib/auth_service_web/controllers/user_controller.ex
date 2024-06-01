@@ -27,11 +27,17 @@ defmodule AuthServiceWeb.UserController do
   end
 
   def unfollow(conn, %{"follower_id" => follower_id, "following_id" => following_id}) do
-    Accounts.unfollow_user(follower_id, following_id)
+    case Accounts.unfollow_user(follower_id, following_id) do
+      {:ok, message} ->
+        conn
+        |> put_status(:ok)
+        |> json(%{"message" => message})
 
-    conn
-    |> put_status(:ok)
-    |> json(%{"message" => "unfollow successful"})
+      {:error, message} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{"error" => message})
+    end
   end
 
   def register(conn, user_params) do

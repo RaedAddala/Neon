@@ -27,7 +27,14 @@ defmodule AuthService.Accounts do
 
   def unfollow_user(follower_id, following_id) do
     query = from f in Follow, where: [follower_id: ^follower_id, following_id: ^following_id]
-    Repo.delete_all(query)
+
+    case Repo.delete_all(query) do
+      {0, _f} ->
+        {:error, "follow relationship unexistent"}
+
+      _ ->
+        {:ok, "unfollow successful"}
+    end
   end
 
   @spec authenticate_user(any(), any()) ::
