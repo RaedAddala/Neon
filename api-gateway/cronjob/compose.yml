@@ -1,0 +1,14 @@
+volumes:
+  public_key:
+
+services:
+  cronjob:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - public_key:/home/keys
+    restart: on-failure:3
+    depends_on:
+      auth-service:
+        condition: service_started
