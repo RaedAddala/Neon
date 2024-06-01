@@ -4,10 +4,13 @@ services:
       context: .
       target: final
       args:
+        - AUTH_SERVICE_VERSION
         - DB_HOST
         - DB_NAME
         - DB_USERNAME
         - DB_PASSWORD
+    volumes:
+      - uploads:/app/lib/auth_service-$AUTH_SERVICE_VERSION/priv/static/uploads/
     depends_on:
       db:
         condition: service_healthy
@@ -30,3 +33,4 @@ services:
 
 volumes:
   db-data:
+  uploads:

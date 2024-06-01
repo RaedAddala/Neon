@@ -4,7 +4,7 @@ defmodule AuthService.MixProject do
   def project do
     [
       app: :auth_service,
-      version: "0.1.0",
+      version: System.get_env("AUTH_SERVICE_VERSION", "0.1.0"),
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -46,7 +46,7 @@ defmodule AuthService.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
       {:argon2_elixir, "~> 4.0"},
-      {:guardian, "~> 2.0"},
+      {:guardian, "~> 2.0"}
     ]
   end
 
