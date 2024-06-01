@@ -4,13 +4,42 @@ defmodule AuthService.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias AuthService.Accounts.Follow
+  alias AuthService.Accounts.User
   alias AuthService.FileUploader
-  alias Hex.API.User
   alias AuthService.Repo
 
-  alias AuthService.Accounts.User
   alias Argon2
 
+  def fetch_preloaded_user(user_id) do
+    preloads = [:followers, :following]
+
+    query = from u in User, where: u.id == ^user_id, preload: ^preloads
+    Repo.one!(query)
+  end
+
+  def follow_user(follower_id, following_id) do
+    follower = fetch_preloaded_user(follower_id)
+
+    fetch_preloaded_user(following_id)
+    |> User.changeset_add_follower(follower)
+  end
+
+  def unfollow_user(follower_id, following_id) do
+    query = from f in Follow, where: [follower_id: ^follower_id, following_id: ^following_id]
+
+    case Repo.delete_all(query) do
+      {0, _f} ->
+        {:error, "follow relationship unexistent"}
+
+      _ ->
+        {:ok, "unfollow successful"}
+    end
+  end
+
+  @spec authenticate_user(any(), any()) ::
+          {:error, :invalid_credentials}
+          | {:ok, atom() | %{:password => <<_::64, _::_*8>>, optional(any()) => any()}}
   def authenticate_user(email, plain_password) do
     query = from(u in User, where: u.email == ^email)
 

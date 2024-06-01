@@ -1,5 +1,6 @@
 defmodule AuthServiceWeb.Router do
   alias AuthServiceWeb.UserController
+  alias AuthServiceWeb.KeyController
   use AuthServiceWeb, :router
 
   pipeline :api do
@@ -14,6 +15,11 @@ defmodule AuthServiceWeb.Router do
       post("/login", UserController, :login)
       post("/logout", UserController, :logout)
       post("/register", UserController, :register)
+      post("/follow/:follower_id/:following_id", UserController, :follow)
+      delete("/unfollow/:follower_id/:following_id", UserController, :unfollow)
+
+      get("/getKey", KeyController, :getKey)
+      
     end
   end
 

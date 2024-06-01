@@ -18,6 +18,28 @@ defmodule AuthServiceWeb.UserController do
   #   end
   # end
 
+  def follow(conn, %{"follower_id" => follower_id, "following_id" => following_id}) do
+    Accounts.follow_user(follower_id, following_id)
+
+    conn
+    |> put_status(:created)
+    |> json(%{"message" => "follow successful"})
+  end
+
+  def unfollow(conn, %{"follower_id" => follower_id, "following_id" => following_id}) do
+    case Accounts.unfollow_user(follower_id, following_id) do
+      {:ok, message} ->
+        conn
+        |> put_status(:ok)
+        |> json(%{"message" => message})
+
+      {:error, message} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{"error" => message})
+    end
+  end
+
   def register(conn, user_params) do
     with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
       conn
@@ -70,7 +92,7 @@ defmodule AuthServiceWeb.UserController do
     with {:ok, %User{} = user} <- Accounts.create_user(user_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/users/#{user}")
+      |> put_resp_header("location", ~p"/users/#{user}")
       |> render(:show, user: user)
     end
   end
