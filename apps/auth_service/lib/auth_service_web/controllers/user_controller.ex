@@ -5,7 +5,7 @@ defmodule AuthServiceWeb.UserController do
   alias AuthService.Accounts.User
   alias AuthService.Guardian
 
-  action_fallback AuthServiceWeb.FallbackController
+  action_fallback(AuthServiceWeb.FallbackController)
 
   # def new(conn, _) do
   #   changeset = Accounts.change_user(%User{})
@@ -26,7 +26,7 @@ defmodule AuthServiceWeb.UserController do
     end
   end
 
-  def login(conn, %{"user" => %{"email" => email, "password" => password}}) do
+  def login(conn, %{"email" => email, "password" => password}) do
     Accounts.authenticate_user(email, password)
     |> auth_reply(conn)
   end
@@ -49,6 +49,7 @@ defmodule AuthServiceWeb.UserController do
 
   defp auth_reply({:error, reason}, conn) do
     conn
+    |> put_status(:unauthorized)
     |> json(%{"error" => reason})
   end
 

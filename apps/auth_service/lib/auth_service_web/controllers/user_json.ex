@@ -16,11 +16,6 @@ defmodule AuthServiceWeb.UserJSON do
   end
 
   defp data(%User{} = user) do
-    %{
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      password: user.password
-    }
+    user
   end
 end
