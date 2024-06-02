@@ -4,7 +4,7 @@
 	import { Channel } from 'phoenix';
 	import { onMount, tick } from 'svelte';
 	import Message from './Message.svelte';
-	import { user } from '$lib/stores';
+	import { auth } from '$lib/stores';
 	import { ScrollArea } from '../ui/scroll-area';
 	import { Textarea } from '../ui/textarea';
 	import { Button } from '../ui/button';
@@ -33,14 +33,10 @@
 			return;
 		}
 
-		const message: MessageType = {
+		const message = {
 			id: crypto.randomUUID(),
-			message: messageContents,
-			user: {
-				username: $user!.username
-			},
-			date: new Date()
-		};
+			message: messageContents
+		} as MessageType;
 
 		channel.push('shout', message);
 
@@ -107,9 +103,10 @@
 	<div class="flex gap-2">
 		<Textarea
 			class="h-10 min-h-0 resize-none py-2"
+			disabled={$auth == null}
 			bind:value={currentMessage}
 			on:keydown={handleKeyDown}
 		/>
-		<Button on:click={handleClick}>Send</Button>
+		<Button disabled={$auth == null} on:click={handleClick}>Send</Button>
 	</div>
 </div>

@@ -15,4 +15,4 @@ export interface UserFetchData extends Omit<User, 'profilePicture' | 'insertedAt
 	updated_at: string;
 }
 
-export type PartialUser = Pick<User, 'username'> & Partial<Pick<User, 'profilePicture'>>;
+export type PartialUser = Pick<User, 'id' | 'username'> & Partial<Pick<User, 'profilePicture'>>;
