@@ -1,4 +1,5 @@
 defmodule LiveChatService.FetchPublicKeyWorker do
+  alias LiveChatService.Tokens
   use GenServer
 
   @public_key_endpoint "http://auth-service:4000/getKey"
@@ -32,17 +33,12 @@ defmodule LiveChatService.FetchPublicKeyWorker do
   defp fetch_public_key! do
     with %{status_code: 200, body: body} <- HTTPoison.get!(@public_key_endpoint),
          %{"key" => key} <- Jason.decode!(body) do
-      File.write!(public_key_path(), key)
+      File.write!(Tokens.public_key_path(), key)
     end
   end
 
-  defp public_key_path do
-    :code.priv_dir(:live_chat_service)
-    |> Path.join("keys/public.pem")
-  end
-
   defp make_keys_directory! do
-    public_key_path()
+    Tokens.public_key_path()
     |> Path.dirname()
     |> File.mkdir_p!()
   end
