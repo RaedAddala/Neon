@@ -1,5 +1,0 @@
-services:
-  streaming-service:
-    build:
-      context: .
-      target: final
