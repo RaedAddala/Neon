@@ -5,7 +5,6 @@ defmodule AuthService.Accounts.User do
   alias AuthService.Repo
   alias AuthService.Accounts.User
 
-  @derive {Jason.Encoder, except: [:password, :__meta__]}
   @primary_key {:id, Ecto.UUID, autogenerate: true}
   schema "users" do
     field(:username, :string)
@@ -13,13 +12,15 @@ defmodule AuthService.Accounts.User do
     field(:password, :string)
     field(:profile_picture, :string)
 
-    many_to_many :followers, User,
+    many_to_many(:followers, User,
       join_through: Follow,
       join_keys: [following_id: :id, follower_id: :id]
+    )
 
-    many_to_many :following, User,
+    many_to_many(:following, User,
       join_through: Follow,
       join_keys: [follower_id: :id, following_id: :id]
+    )
 
     timestamps(type: :utc_datetime)
   end
@@ -59,4 +60,17 @@ defmodule AuthService.Accounts.User do
   end
 
   defp put_password_hash(changeset), do: changeset
+
+  defimpl Jason.Encoder do
+    def encode(value, opts) do
+      value
+      |> Map.from_struct()
+      |> Map.drop([:__meta__, :password])
+      |> Enum.into(%{}, fn
+        {key, %Ecto.Association.NotLoaded{}} -> {key, nil}
+        {key, value} -> {key, value}
+      end)
+      |> Jason.Encode.map(opts)
+    end
+  end
 end

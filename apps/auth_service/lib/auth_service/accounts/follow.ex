@@ -1,9 +1,10 @@
 defmodule AuthService.Accounts.Follow do
   use Ecto.Schema
 
+  @derive {Jason.Encoder, except: [:__meta__]}
   schema "follows" do
-    field :following_id, Ecto.UUID
-    field :follower_id, Ecto.UUID
+    field(:following_id, Ecto.UUID)
+    field(:follower_id, Ecto.UUID)
     timestamps()
   end
 
