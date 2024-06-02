@@ -1,4 +1,5 @@
 defmodule LiveChatServiceWeb.UserSocket do
+  alias LiveChatService.Tokens
   use Phoenix.Socket
 
   # A Socket handler
@@ -8,7 +9,7 @@ defmodule LiveChatServiceWeb.UserSocket do
 
   ## Channels
 
-  channel "chat:*", LiveChatServiceWeb.ChatChannel
+  channel("chat:*", LiveChatServiceWeb.ChatChannel)
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -24,6 +25,14 @@ defmodule LiveChatServiceWeb.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
+  @impl true
+  def connect(%{"token" => token}, socket, _connect_info) do
+    case Tokens.get_user_data(token) do
+      {:ok, user} -> {:ok, assign(socket, :user, user)}
+      error -> error
+    end
+  end
+
   @impl true
   def connect(_params, socket, _connect_info) do
     {:ok, socket}

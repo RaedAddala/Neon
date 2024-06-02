@@ -1,5 +1,4 @@
 defmodule LiveChatServiceWeb.ChatChannel do
-  alias Ecto.Changeset
   alias LiveChatService.Message
   use LiveChatServiceWeb, :channel
 
@@ -12,24 +11,18 @@ defmodule LiveChatServiceWeb.ChatChannel do
     end
   end
 
-  # Channels can be used in a request/response fashion
-  # by sending replies to requests from the client
-  @impl true
-  def handle_in("ping", payload, socket) do
-    {:reply, {:ok, payload}, socket}
-  end
-
   # It is also common to receive messages from the client and
-  # broadcast to everyone in the current topic (chat:lobby).
+  # broadcast to everyone in the current topic (chat:username).
   @impl true
   def handle_in("shout", payload, socket) do
-    message_changeset = Message.changeset(%Message{}, payload)
+    if current_user = Map.get(socket.assigns, :user) do
+      message_data = Map.put(payload, "user", current_user)
+      message_changeset = Message.changeset(%Message{}, message_data)
 
-    with %Changeset{changes: message, valid?: true} <- message_changeset,
-         %{user: user_changeset} <- message,
-         %Changeset{changes: user, valid?: true} <- user_changeset do
-      message_struct = %{message | user: user}
-      broadcast(socket, "shout", message_struct)
+      if(message_changeset.valid?) do
+        message = Ecto.Changeset.apply_changes(message_changeset)
+        broadcast(socket, "shout", message)
+      end
     end
 
     {:noreply, socket}
