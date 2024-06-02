@@ -1,0 +1,5 @@
+services:
+  live-chat-service:
+    depends_on:
+      auth-service:
+        condition: service_started
