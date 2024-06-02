@@ -2,11 +2,15 @@
 
 This is the Backend of the Neon Platform.
 
-*What is Neon?:*
+## What is Neon?
 
 Neon is a Live Streaming Platform dedicated mainly for Software Engineeing/IT streamers.
 
 Our focus is to provide the best experience for developers willing to teach, create content or make contributions through our service.
+
+## Build and Config Guide
+
+***TODO***
 
 ## Contributing
 

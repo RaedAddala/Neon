@@ -1,69 +1,6 @@
-# Live Streaming Service with Membrane and Elixir
+# Pipeline in Elixir and Membrane
 
-----
-
-## Table of Contents
-
-1. [Introduction](#introduction)
-2. [Service Structure](#service-structure)
-3. [Build Project](#build-project)
-4. [Technologies Used](#technologies-used)
-5. [API Architecture and System Design](#api-architecture-and-system-design)
-    1. [Software Requirements and Needs](#software-requirements-and-needs)
-    2. [Live Streaming Architecture Overview](#live-streaming-architecture-overview)
-    3. [System Design](#system-design)
-    4. [Architecture Graph](#architecture-graph)
-    5. [Pipeline Graphes](#pipeline-graphes)
-        1. [First Mile Delivery](#first-mile-delivery)
-        2. [Last Mile Delivery](#last-mile-delivery)
-    6. [Protocol Choices](#protocol-choices)
-    7. [Codecs Choices](#codecs-choices)
-6. [Contributing](#contributing)
-7. [Licencse](#license)
-
-## Introduction
-
-A Live Streaming Service that supports connection through ***RTMP*** and stream the incoming stream using ***Adaptive Bitrate Streaming with HLS***.
-
-## Service Structure
-
-The project is divided into 2 parts:
-
-- Phoenix API with Membrane Pipelines.
-- Svelte FrontEnd.
-
-## Build Project
-
-1. Clone this repository: `git clone https://github.com/medhedibenali/neon_backend.git` or `git clone git@github.com:medhedibenali/neon_backend.git`.
-2. Make sure you have Elixir and nodejs installed.
-3. In the API, Run `mix setup` and then `mix phx.server`.
-4. In the Interface, Run `npm install`, `then npm run dev`.
-
-## Technologies Used
-
-- Elixir
-- Phoenix
-- Membrane
-- NPM
-- Svelte Kit
-- RTMP
-- Adaptive Bitrate Streaming (HLS)
-
-## API Architecture and System Design
-
-### Software Requirements and Needs
-
-We are building a Live Streaming Platform. Scalability, Low-Latency, Fault-Tolerance, Load-Tolerance, and Consistent Stream are a must.
-
-So our system must:
-
-- receive streams in high-resolution without data loss and in low latency.
-- perform real-time processing.
-- provide high-throughput for worldwide distribution at scale.
-
-***offering end-to-end low latency video experience.***
-
-### Live Streaming Architecture Overview
+## Live Streaming Architecture Overview
 
 These are the main components of the System:
 
@@ -82,7 +19,7 @@ These are the main components of the System:
         - ***HLS***
         - ***MPEG-DASH***
 
-### System Design
+## System Design
 
 For the current implementation which is simplified, we have ***only one pipeline of data*** (video chunks) with ***one operator***, the ***transcoder***, else we have the source which is the RTMP ingestion and the sink which is the HLS distribution.
 
@@ -93,7 +30,7 @@ Our System will be then divided into *2 big parts*:
 
 ![alt text](img/architecture.png)
 
-### Architecture Graph
+## Architecture Graph
 
 ```mermaid
 graph
@@ -105,9 +42,9 @@ graph
     Viewers --> App
 ```
 
-### Pipeline Graphes
+## Pipeline Graphes
 
-#### First Mile Delivery
+### First Mile Delivery
 
 ```mermaid
 graph TD
@@ -130,7 +67,7 @@ graph TD
 
 ```
 
-#### Last Mile Delivery
+### Last Mile Delivery
 
 ```mermaid
 graph TD
@@ -148,7 +85,7 @@ graph TD
     
 ```
 
-### Protocol Choices
+## Protocol Choices
 
 - ***RTMP***:
 
@@ -176,28 +113,9 @@ graph TD
 
   Making it perfect for **Last Mile Delivery**.
 
-### Codecs Choices
+## Codecs Choices
 
 - ***AAC*** (Advanced Audio Codec).
 - ***H.264*** (MPEG-4 AVC (Advanced Video Codec)).
 
 These were chosen because of their reliability and wide support in almost all devices nowadays.
-
-## Contributing
-
-***We are always pleased to receive your suggestions, criticism and corrections. We want this service to be a defacto boilerplate for live streaming projects in the future. Your contributions mean a lot.***
-
-We welcome contributions to the project. To contribute, please follow these steps:
-
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature/your_feature`)
-3. Make your changes
-4. Commit your changes (`git commit -am 'Add new feature'`)
-5. Push to the branch (`git push origin feature/your_feature`)
-6. Create a new Pull Request
-
-Please ensure your code follows the project's coding standards and include tests if applicable.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
