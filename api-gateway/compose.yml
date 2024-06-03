@@ -42,7 +42,8 @@ services:
     restart: on-failure
 
   kong:
-    image: "${KONG_DOCKER_TAG:-kong:latest}"
+    build:
+      context: .
     user: "${KONG_USER:-kong}"
     environment:
       <<: *kong-env
