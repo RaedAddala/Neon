@@ -1,0 +1,81 @@
+_format_version: "2.1"
+_transform: true
+
+services:
+  - name: auth-service
+    url: http://auth-service:4000/
+    routes:
+      - name: alter-users
+        paths:
+          - /users/*
+        strip_path: false
+        methods:
+          - DELETE
+          - PUT
+          - PATCH
+        plugins:
+          - name: auth
+            config:
+              token_location: "header"
+      - name: get-users
+        paths:
+          - /users/*
+        strip_path: false
+        methods:
+          - GET
+      - name: uploads-endpoint
+        paths:
+          - /uploads/*
+        strip_path: false
+        methods:
+          - GET
+
+  - name: register
+    url: http://auth-service:4000/register
+    routes:
+      - name: register-route
+        paths:
+          - /auth/register
+        methods:
+          - POST
+
+  - name: login
+    url: http://auth-service:4000/login
+    routes:
+      - name: login-route
+        paths:
+          - /auth/login
+        methods:
+          - POST
+
+  - name: logout
+    url: http://auth-service:4000/logout
+    routes:
+      - name: logout-route
+        paths:
+          - /auth/logout
+        methods:
+          - POST
+        plugins:
+          - name: auth
+            config:
+              token_location: "header"
+
+  - name: live-chat-service
+    url: http://live-chat-service:4000/
+    routes:
+      - name: live-chat
+        paths:
+          - /live-chat/*
+    plugins:
+      - name: auth
+        config:
+          token_location: "query"
+          allow_anonymous: true
+
+  - name: streaming-service
+    url: http://streaming-service:4000/
+    routes:
+      - name: streaming
+        paths:
+          - /stream/*
