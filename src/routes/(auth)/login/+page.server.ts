@@ -35,7 +35,7 @@ export const actions = {
 			const userId = jwtDecode(auth.token).sub as string;
 
 			const { data: fetchData } = await apiGatewayFetch<FetchData<UserFetchData>>(
-				`/auth/users/${userId}`,
+				`/users/${userId}`,
 				{
 					method: 'GET'
 				}
