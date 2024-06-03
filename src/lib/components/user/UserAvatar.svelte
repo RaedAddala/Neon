@@ -7,7 +7,7 @@
 
 <Root class="h-8 w-8">
 	<Image
-		src={import.meta.env.VITE_BACKEND_URL + '/auth' + user.profilePicture}
+		src={import.meta.env.VITE_BACKEND_URL + user.profilePicture}
 		alt={user.username}
 	/>
 	<Fallback>{user.username.charAt(0).toUpperCase()}</Fallback>
