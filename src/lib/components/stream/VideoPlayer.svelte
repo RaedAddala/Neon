@@ -1,13 +1,5 @@
 <script lang="ts">
-	import { mediaStream } from '$lib/stores';
-
-	let videoElem: HTMLVideoElement | null = null;
-
-	$: if (videoElem !== null) {
-		videoElem.srcObject = $mediaStream;
-	}
+	const videoSrc = import.meta.env.VITE_WATCH_URL;
 </script>
 
-<video bind:this={videoElem} autoplay controls class="w-full">
-	<track kind="captions" />
-</video>
+<iframe src={videoSrc} class="aspect-video w-full" title="live stream"></iframe>
