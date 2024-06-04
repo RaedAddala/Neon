@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - public_key:/home/keys
-    restart: on-failure:3
+    restart: on-failure
     depends_on:
       auth-service:
         condition: service_started
