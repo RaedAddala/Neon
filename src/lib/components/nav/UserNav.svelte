@@ -19,6 +19,10 @@
 
 		goto('/');
 	}
+	function goToProfile() {
+		if (!browser) return;
+		goto('/profile');
+	}
 </script>
 
 <DropdownMenu.Root>
@@ -36,7 +40,7 @@
 		</DropdownMenu.Label>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Group>
-			<DropdownMenu.Item>Profile</DropdownMenu.Item>
+			<DropdownMenu.Item on:click={goToProfile}>Profile</DropdownMenu.Item>
 		</DropdownMenu.Group>
 		<DropdownMenu.Separator />
 		<DropdownMenu.Item on:click={logout}>Log out</DropdownMenu.Item>
