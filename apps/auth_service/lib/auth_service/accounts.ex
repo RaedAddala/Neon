@@ -37,9 +37,7 @@ defmodule AuthService.Accounts do
     end
   end
 
-  @spec authenticate_user(any(), any()) ::
-          {:error, :invalid_credentials}
-          | {:ok, atom() | %{:password => <<_::64, _::_*8>>, optional(any()) => any()}}
+
   def authenticate_user(email, plain_password) do
     query = from(u in User, where: u.email == ^email)
 
