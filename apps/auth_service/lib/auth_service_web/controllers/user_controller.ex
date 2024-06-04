@@ -2,8 +2,11 @@ defmodule AuthServiceWeb.UserController do
   use AuthServiceWeb, :controller
 
   alias AuthService.Accounts
+  alias AuthService.ImageChecker
+  alias AuthService.FileUploader
   alias AuthService.Accounts.User
   alias AuthService.Guardian
+  alias Argon2
 
   action_fallback(AuthServiceWeb.FallbackController)
 
@@ -57,7 +60,6 @@ defmodule AuthServiceWeb.UserController do
     conn
     # This module's full name is Auth.Accounts.Guardian.Plug,
     |> Guardian.Plug.sign_out()
-    |> IO.inspect()
 
     # and the arguments specified in the Guardian.Plug.sign_out()
     |> json(:ok)
@@ -102,11 +104,33 @@ defmodule AuthServiceWeb.UserController do
     render(conn, :show, user: user)
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
+  def update(conn, %{"id" => id} = user_params) do
     user = Accounts.get_user!(id)
+    %{"confirmPassword" => plain_password} = user_params
 
-    with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
-      render(conn, :show, user: user)
+    if Argon2.verify_pass(plain_password, user.password) do
+      user_params =
+        if(
+          (upload = user_params["profile_picture"]) &&
+            ImageChecker.is_image?(user_params["profile_picture"])
+        ) do
+          path =
+            :code.priv_dir(:auth_service)
+            |> Path.join("static/uploads/profile_pictures/")
+
+          file = FileUploader.upload_file(upload, path)
+          %{user_params | "profile_picture" => "/uploads/#{file}"}
+        else
+          user_params
+        end
+
+      with {:ok, %User{} = user} <- Accounts.update_user(user, user_params) do
+        render(conn, :show, user: user)
+      end
+    else
+      conn
+      |> put_status(:invalid_credentials)
+      |> json(%{"error" => "wrong password"})
     end
   end
 
