@@ -12,7 +12,7 @@ def get_key():
 
     res = response.json()
     key = res["key"]
-    f = open("/home/keys/public_key.pom", "w")
+    f = open("/home/keys/public_key.pem", "w")
     f.write(key)
     f.close()
 

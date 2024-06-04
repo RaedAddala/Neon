@@ -26,11 +26,10 @@ defmodule LiveChatServiceWeb.UserSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   @impl true
-  def connect(%{"token" => token}, socket, _connect_info) do
-    case Tokens.get_user_data(token) do
-      {:ok, user} -> {:ok, assign(socket, :user, user)}
-      error -> error
-    end
+  def connect(%{"id" => id, "username" => username}, socket, _connect_info) do
+    user = %{"id" => id, "username" => username}
+
+    {:ok, assign(socket, :user, user)}
   end
 
   @impl true
