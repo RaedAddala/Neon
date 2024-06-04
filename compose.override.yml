@@ -1,6 +1,0 @@
-services:
-  live-chat-service:
-    restart: on-failure:3
-    depends_on:
-      auth-service:
-        condition: service_started

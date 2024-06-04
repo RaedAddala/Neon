@@ -8,7 +8,6 @@ defmodule LiveChatService.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      LiveChatService.FetchPublicKeyWorker,
       LiveChatServiceWeb.Telemetry,
       {DNSCluster, query: Application.get_env(:live_chat_service, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: LiveChatService.PubSub},
