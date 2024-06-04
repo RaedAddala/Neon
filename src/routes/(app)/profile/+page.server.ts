@@ -40,7 +40,7 @@ export const actions = {
 
 		try {
 			const { data: fetchData } = await apiGatewayFetch<FetchData<UserFetchData>>(
-				`/auth/users/${userId}`,
+				`/users/${userId}`,
 				{
 					method: 'PUT',
 					body: formData
