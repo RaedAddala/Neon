@@ -73,9 +73,9 @@ services:
           token_location: "query"
           allow_anonymous: true
 
-  - name: streaming-service
-    url: http://streaming-service:4000/
+  - name: live-streaming-pipeline
+    url: http://live-streaming-pipeline:4000/
     routes:
-      - name: streaming
+      - name: watch
         paths:
-          - /stream/*
+          - /watch/*

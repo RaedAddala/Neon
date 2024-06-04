@@ -1,5 +1,5 @@
 include:
   - path: apps/auth_service/compose.yml
-  # - path: apps/streaming_service/compose.yml
+  - path: apps/live_streaming_pipeline/compose.yml
   - path: apps/live_chat_service/compose.yml
   - path: api-gateway/compose.yml
