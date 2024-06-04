@@ -8,7 +8,7 @@ defmodule LiveStreamingPipeline.Application do
   alias Membrane.RTMP.Source.TcpServer
 
   @port 9006
-  @local_ip {127, 0, 0, 1}
+  @local_ip {0, 0, 0, 0}
 
   @impl true
   def start(_type, _args) do
