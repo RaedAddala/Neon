@@ -1,0 +1,36 @@
+services:
+  auth-service:
+    build:
+      context: .
+      target: final
+      args:
+        - AUTH_SERVICE_VERSION
+        - DB_HOST
+        - DB_NAME
+        - DB_USERNAME
+        - DB_PASSWORD
+    volumes:
+      - uploads:/app/lib/auth_service-$AUTH_SERVICE_VERSION/priv/static/uploads/
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    restart: always
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
+  uploads:
