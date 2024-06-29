@@ -1,5 +1,0 @@
-services:
-  live-streaming-pipeline:
-    ports:
-      - 4000:4000
-      - 9006:9006

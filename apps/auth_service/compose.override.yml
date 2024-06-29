@@ -1,4 +1,0 @@
-services:
-  auth-service:
-    ports:
-      - 4000:4000

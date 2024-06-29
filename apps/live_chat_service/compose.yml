@@ -1,5 +1,0 @@
-services:
-  live-chat-service:
-    build:
-      context: .
-      target: final
