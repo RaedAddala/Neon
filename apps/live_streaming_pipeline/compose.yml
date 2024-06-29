@@ -1,0 +1,5 @@
+services:
+  live-streaming-pipeline:
+    build:
+      context: .
+      target: final

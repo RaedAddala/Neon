@@ -1,0 +1,4 @@
+services:
+  live-chat-service:
+    ports:
+      - 4000:4000

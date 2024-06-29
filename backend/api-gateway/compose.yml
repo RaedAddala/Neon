@@ -1,0 +1,3 @@
+include:
+  - path: kong/compose.yml
+  - path: cronjob/compose.yml
