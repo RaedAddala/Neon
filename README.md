@@ -1,6 +1,6 @@
 # Neon Live Streaming Platform
 
-Neon is a Microservice Live Streaming Platform for Software Engineer Streamers.
+Neon is a Microservice Live Streaming Platform for Software Engineering Streamers.
 
 ## Technologies Used
 
